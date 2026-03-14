@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMB Homes — Embaixada Church</title>
+    <meta name="description" content="Encontre um EMB Home perto de voce. Pequenos grupos da Embaixada Church no Sul da Florida.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        :root {
+            --orange: #FF8C00;
+            --orange-hover: #FF9E2C;
+            --black: #000000;
+            --black-soft: #111111;
+            --white: #FFFFFF;
+            --gray: #999999;
+            --gray-dark: #666666;
+            --gray-muted: #444444;
+            --gray-light: #E0E0E0;
+            --font-display: 'Bebas Neue', Impact, sans-serif;
+            --font-body: 'Barlow', -apple-system, sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--orange); color: var(--black); }
+
+        /* ============================================
+           NAVBAR
+           ============================================ */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--black); height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .welcome-home {
+            font-family: var(--font-body); font-size: 15px;
+            font-weight: 700; color: var(--orange);
+        }
+
+        .navbar-links {
+            display: flex; gap: 28px; list-style: none; align-items: center;
+        }
+
+        .navbar-links a {
+            color: var(--white); text-decoration: none;
+            font-size: 14px; font-weight: 500; transition: color 0.2s;
+        }
+
+        .navbar-links a.active { color: var(--orange); }
+        .navbar-links a:hover { color: var(--orange); }
+
+        .back-home-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--orange); color: var(--black);
+            text-decoration: none; padding: 8px 20px;
+            border-radius: 50px; font-size: 12px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .back-home-btn:hover {
+            background: var(--orange-hover);
+            transform: translateY(-1px);
+        }
+
+        .back-home-btn svg {
+            width: 14px; height: 14px;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none; background: none; border: none;
+            color: var(--white); cursor: pointer; padding: 4px;
+        }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero {
+            position: relative; min-height: 75vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; background: var(--black);
+            overflow: hidden; padding-top: 56px;
+        }
+
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1600&q=80') center/cover no-repeat;
+            opacity: 0.3; filter: saturate(0.5);
+        }
+
+        .hero-content {
+            position: relative; z-index: 2;
+            animation: fadeUp 0.8s var(--ease) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-eyebrow {
+            font-size: 14px; font-weight: 500; letter-spacing: 6px;
+            text-transform: uppercase; color: var(--white); margin-bottom: 16px;
+            animation: fadeUp 0.8s var(--ease) 0.1s both;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(72px, 14vw, 140px);
+            font-weight: 400; line-height: 0.9; color: var(--white);
+            text-transform: uppercase; letter-spacing: 4px;
+        }
+
+        .hero h1 .dot { color: var(--orange); }
+
+        .hero-highlight {
+            display: inline-block; background: var(--orange); color: var(--black);
+            font-family: var(--font-display); font-size: clamp(16px, 2vw, 22px);
+            letter-spacing: 6px; text-transform: uppercase;
+            padding: 6px 32px; margin-top: 8px;
+            animation: fadeUp 0.8s var(--ease) 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: 16px; color: var(--gray); margin-top: 24px;
+            animation: fadeUp 0.8s var(--ease) 0.3s both;
+        }
+
+        /* ============================================
+           FILTER BAR
+           ============================================ */
+        .filter-section {
+            background: var(--white); border-bottom: 3px solid var(--orange);
+            padding: 20px 40px; position: sticky; top: 56px; z-index: 90;
+        }
+
+        .filter-bar {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 13px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--black); margin-right: 4px;
+        }
+
+        .filter-bar select {
+            padding: 10px 40px 10px 16px;
+            border: 2px solid var(--black); border-radius: 0;
+            font-family: var(--font-body); font-size: 14px; font-weight: 500;
+            color: var(--black); background: var(--white); cursor: pointer;
+            appearance: none; min-width: 170px; transition: all 0.2s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23FF8C00' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+        }
+
+        .filter-bar select:hover { border-color: var(--orange); }
+        .filter-bar select:focus { outline: none; border-color: var(--orange); }
+
+        .clear-btn {
+            padding: 10px 24px; border: 2px solid var(--gray-light); border-radius: 0;
+            background: transparent; font-family: var(--font-body); font-size: 13px;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            color: var(--gray-dark); cursor: pointer; transition: all 0.2s; margin-left: auto;
+        }
+
+        .clear-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+        /* ============================================
+           RESULTS
+           ============================================ */
+        .results-section { max-width: 1200px; margin: 0 auto; padding: 40px 40px 80px; }
+
+        .results-header {
+            display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 32px;
+        }
+
+        .results-title {
+            font-family: var(--font-display); font-size: 48px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--black);
+        }
+
+        .results-title::after {
+            content: ''; display: block; width: 100%; height: 8px;
+            background: var(--orange); margin-top: -4px;
+        }
+
+        .results-count { font-size: 14px; color: var(--gray-dark); font-weight: 500; }
+        .results-count strong { color: var(--orange); font-weight: 700; }
+
+        /* ============================================
+           CARD GRID
+           ============================================ */
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+
+        .card {
+            background: var(--white); border: 2px solid var(--black);
+            padding: 28px 24px; display: flex; flex-direction: column; gap: 16px;
+            position: relative; overflow: hidden; transition: all 0.3s var(--ease);
+            margin: -1px; opacity: 0; transform: translateY(20px);
+            animation: cardIn 0.5s var(--ease) both;
+        }
+
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--orange); transform: scaleX(0);
+            transform-origin: left; transition: transform 0.4s var(--ease);
+        }
+
+        .card:hover { z-index: 2; border-color: var(--orange); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+        .card:hover::before { transform: scaleX(1); }
+
+        @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+        .card:nth-child(6) { animation-delay: 0.3s; }
+        .card:nth-child(7) { animation-delay: 0.35s; }
+        .card:nth-child(8) { animation-delay: 0.4s; }
+        .card:nth-child(9) { animation-delay: 0.45s; }
+        .card:nth-child(10) { animation-delay: 0.5s; }
+        .card:nth-child(11) { animation-delay: 0.55s; }
+
+        .card-header { display: flex; align-items: center; gap: 14px; }
+
+        .leader-photo {
+            width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--orange); flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 22px; color: var(--black);
+            background: var(--orange); transition: transform 0.3s var(--ease);
+        }
+
+        .card:hover .leader-photo { transform: scale(1.05); }
+
+        .card-header-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+        .group-title {
+            font-family: var(--font-body); font-size: 16px; font-weight: 800;
+            color: var(--black); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;
+        }
+
+        .leader-names { font-size: 13px; color: var(--gray-dark); }
+        .co-leaders { font-size: 12px; color: var(--gray); font-style: italic; }
+
+        .card-info {
+            display: flex; flex-direction: column; gap: 8px;
+            padding-top: 4px; border-top: 1px solid var(--gray-light);
+        }
+
+        .info-row {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13px; color: var(--gray-dark); font-weight: 500;
+        }
+
+        .info-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--orange); }
+
+        .gender-badge {
+            display: inline-flex; padding: 4px 12px; font-size: 11px;
+            font-weight: 700; letter-spacing: 1px; text-transform: uppercase; width: fit-content;
+        }
+
+        .gender-badge.homens { color: #3B82F6; background: rgba(59,130,246,0.12); border-left: 3px solid #3B82F6; }
+        .gender-badge.mulheres { color: #EC4899; background: rgba(236,72,153,0.12); border-left: 3px solid #EC4899; }
+        .gender-badge.misto { color: #22C55E; background: rgba(34,197,94,0.12); border-left: 3px solid #22C55E; }
+
+        .card-description {
+            font-size: 13px; color: var(--gray); line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        .card-btn {
+            margin-top: auto; padding: 12px 24px; background: var(--orange);
+            color: var(--black); border: none; border-radius: 50px;
+            font-family: var(--font-body); font-size: 13px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.3s; text-align: center;
+        }
+
+        .card-btn:hover {
+            background: var(--orange-hover); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,140,0,0.3);
+        }
+
+        /* ============================================
+           EMPTY STATE
+           ============================================ */
+        .empty-state { display: none; text-align: center; padding: 80px 20px; }
+        .empty-state.visible { display: flex; flex-direction: column; align-items: center; }
+        .empty-state-icon { width: 64px; height: 64px; border: 3px solid var(--orange); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .empty-state-icon svg { width: 28px; height: 28px; color: var(--orange); }
+        .empty-state p { font-size: 16px; color: var(--gray-dark); margin-bottom: 20px; }
+        .empty-state button {
+            padding: 12px 28px; border: 2px solid var(--black); border-radius: 0;
+            background: transparent; font-family: var(--font-body); font-size: 13px;
+            font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            color: var(--black); cursor: pointer; transition: all 0.2s;
+        }
+        .empty-state button:hover { background: var(--orange); border-color: var(--orange); }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85); z-index: 200;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .modal-overlay.visible { display: flex; }
+
+        .modal {
+            background: var(--black); border: 2px solid var(--orange);
+            padding: 48px; max-width: 500px; width: 90%; position: relative;
+            animation: modalIn 0.35s var(--ease);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute; top: 16px; right: 16px; width: 36px; height: 36px;
+            border: 2px solid var(--gray-muted); background: transparent;
+            cursor: pointer; font-size: 20px; display: flex; align-items: center;
+            justify-content: center; color: var(--white); transition: all 0.2s;
+        }
+        .modal-close:hover { border-color: var(--orange); color: var(--orange); }
+
+        .modal-eyebrow { font-family: var(--font-display); font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
+
+        .modal h2 { font-family: var(--font-display); font-size: 32px; color: var(--white); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+        .modal .modal-subtitle { font-size: 14px; color: var(--gray); margin-bottom: 28px; }
+
+        .modal-form { display: flex; flex-direction: column; gap: 16px; }
+        .modal-form label { font-size: 13px; font-weight: 600; color: var(--white); display: flex; flex-direction: column; gap: 6px; }
+        .modal-form input, .modal-form select { padding: 14px 16px; border: 2px solid var(--gray-muted); background: var(--black); color: var(--white); font-family: var(--font-body); font-size: 15px; transition: border-color 0.2s; }
+        .modal-form input::placeholder { color: var(--gray-muted); }
+        .modal-form input:focus, .modal-form select:focus { outline: none; border-color: var(--orange); }
+
+        /* Hidden field for Netlify */
+        .hidden { display: none; }
+
+        .modal-form button[type="submit"] {
+            padding: 16px; background: var(--orange); color: var(--black); border: none;
+            border-radius: 50px; font-family: var(--font-body); font-size: 15px;
+            font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s; margin-top: 8px;
+        }
+        .modal-form button[type="submit"]:hover { background: var(--orange-hover); }
+
+        .success-message { display: none; text-align: center; padding: 20px 0; }
+        .success-message.visible { display: block; animation: fadeUp 0.4s ease; }
+        .success-message .checkmark { width: 56px; height: 56px; border: 3px solid var(--orange); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; color: var(--orange); }
+        .success-message p { font-size: 15px; color: var(--gray-light); line-height: 1.7; }
+
+        /* ============================================
+           BOTTOM CTA + BACK TO HOME
+           ============================================ */
+        .bottom-cta {
+            background: var(--black); text-align: center; padding: 80px 40px;
+        }
+
+        .bottom-cta h2 {
+            font-family: var(--font-display); font-size: clamp(48px,8vw,80px);
+            color: var(--white); text-transform: uppercase; letter-spacing: 4px;
+            line-height: 1; margin-bottom: 20px;
+        }
+
+        .bottom-cta p {
+            color: var(--gray); font-size: 16px; max-width: 500px;
+            margin: 0 auto 40px;
+        }
+
+        .bottom-cta-home {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--orange); color: var(--black);
+            text-decoration: none; padding: 16px 40px;
+            border-radius: 50px; font-size: 15px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .bottom-cta-home:hover {
+            background: var(--orange-hover); transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255,140,0,0.3);
+        }
+
+        .bottom-cta-home svg { width: 18px; height: 18px; }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--black); border-top: 3px solid var(--orange);
+            text-align: center; padding: 32px;
+        }
+
+        .footer .welcome-text { font-weight: 700; color: var(--orange); font-size: 14px; margin-bottom: 4px; }
+        .footer p { font-size: 12px; color: var(--gray-muted); }
+        .footer a { color: var(--orange); text-decoration: none; }
+
+        /* ============================================
+           SCROLL TO TOP
+           ============================================ */
+        .scroll-top {
+            position: fixed; bottom: 32px; left: 32px; z-index: 50;
+            width: 44px; height: 44px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; background: none;
+            border: none; color: var(--orange); transition: transform 0.2s;
+        }
+        .scroll-top:hover { transform: translateY(-3px); }
+        .scroll-top svg { width: 32px; height: 32px; }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .navbar-links { display: none; }
+            .navbar-links.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 56px; left: 0; right: 0;
+                background: var(--black); padding: 20px;
+                gap: 16px; border-bottom: 3px solid var(--orange);
+            }
+            .menu-toggle { display: block; }
+            .hero { min-height: 55vh; }
+            .filter-section { padding: 16px 20px; top: 56px; }
+            .filter-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+            .filter-label { display: none; }
+            .filter-bar select { min-width: 100%; }
+            .clear-btn { margin-left: 0; }
+            .results-section { padding: 28px 20px 60px; }
+            .results-title { font-size: 32px; }
+            .results-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .card { padding: 24px 20px; }
+            .modal { padding: 32px 24px; width: 95%; }
+            .bottom-cta { padding: 60px 20px; }
+            .scroll-top { left: 16px; bottom: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         HIDDEN NETLIFY FORM (required for detection)
+         Netlify scans HTML at deploy time for forms.
+         ============================================ -->
+    <form name="emb-home-signup" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="nome">
+        <input type="email" name="email">
+        <input type="tel" name="telefone">
+        <input type="text" name="emb-home">
+        <input type="text" name="bot-field">
+    </form>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="https://www.embaixadachurch.org/" class="welcome-home">Welcome Home</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <ul class="navbar-links" id="navLinks">
+            <li><a href="https://www.embaixadachurch.org/">Home</a></li>
+            <li><a href="https://www.embaixadachurch.org/" >Sobre Nos</a></li>
+            <li><a href="https://www.embaixadachurch.org/">Visite</a></li>
+            <li><a href="#" class="active">EMB Homes</a></li>
+            <li><a href="https://www.embaixadachurch.org/">Oferte</a></li>
+            <li>
+                <a href="https://www.embaixadachurch.org/" class="back-home-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                    Voltar ao Site
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">W E L C O M E &nbsp; T O</div>
+            <h1>Emb<span class="dot">.</span></h1>
+            <div class="hero-highlight">Homes &mdash; Pequenos Grupos</div>
+            <p class="hero-subtitle">Encontre uma comunidade perto de voce. Vida real, conexao real.</p>
+        </div>
+    </section>
+
+    <!-- FILTERS -->
+    <section class="filter-section">
+        <div class="filter-bar">
+            <span class="filter-label">Filtrar:</span>
+            <select id="genderFilter">
+                <option value="all">Genero</option>
+                <option value="Homens">Homens</option>
+                <option value="Mulheres">Mulheres</option>
+                <option value="Misto">Misto</option>
+            </select>
+            <select id="dayFilter">
+                <option value="all">Dia da Semana</option>
+                <option value="Segunda">Segunda-feira</option>
+                <option value="Terca">Terca-feira</option>
+                <option value="Quarta">Quarta-feira</option>
+                <option value="Quinta">Quinta-feira</option>
+                <option value="Sexta">Sexta-feira</option>
+                <option value="Sabado">Sabado</option>
+                <option value="Domingo">Domingo</option>
+            </select>
+            <select id="neighborhoodFilter">
+                <option value="all">Bairro</option>
+            </select>
+            <button class="clear-btn" id="clearFiltersBtn">Limpar Filtros</button>
+        </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="results-section">
+        <div class="results-header">
+            <div class="results-title">Encontre Seu Grupo</div>
+            <p class="results-count" id="resultsCount"></p>
+        </div>
+        <div class="cards-grid" id="cardsGrid"></div>
+        <div class="empty-state" id="emptyState">
+            <div class="empty-state-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <p>Nenhum EMB Home encontrado com esses filtros.</p>
+            <button id="emptyStateClearBtn">Limpar Filtros</button>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA + BACK TO HOME -->
+    <section class="bottom-cta">
+        <h2>Queremos Te<br>Conhecer</h2>
+        <p>Junte-se a um EMB Home e faca parte de uma familia que caminha junto com voce.</p>
+        <a href="https://www.embaixadachurch.org/" class="bottom-cta-home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Voltar ao Site Principal
+        </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p class="welcome-text">Welcome Home</p>
+        <p><a href="https://www.embaixadachurch.org/">Embaixada Church</a> &mdash; South Florida</p>
+    </footer>
+
+    <!-- SCROLL TOP -->
+    <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-eyebrow">Inscreva-se</div>
+            <h2 id="modalGroupTitle">EMB Home</h2>
+            <p class="modal-subtitle" id="modalSubtitle"></p>
+
+            <form class="modal-form" id="modalForm" name="emb-home-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                <input type="hidden" name="form-name" value="emb-home-signup">
+                <input type="text" name="bot-field" class="hidden">
+                <input type="hidden" name="emb-home" id="formGroupName" value="">
+
+                <label>Nome *
+                    <input type="text" name="nome" id="inputName" placeholder="Seu nome completo" required>
+                </label>
+                <label>Email *
+                    <input type="email" name="email" id="inputEmail" placeholder="email@example.com" required>
+                </label>
+                <label>Telefone
+                    <input type="tel" name="telefone" id="inputPhone" placeholder="(xxx) xxx-xxxx">
+                </label>
+                <button type="submit" id="submitBtn">Enviar</button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <div class="checkmark">&#10003;</div>
+                <p id="successText"></p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ==========================================================
+// EMB HOMES — Dynamic data from data/homes.json
+// Managed via Decap CMS at /admin
+// ==========================================================
+let embHomes = [];
+
+const dayLabels = {
+    'Segunda':'Segunda-feira','Terca':'Terca-feira','Quarta':'Quarta-feira',
+    'Quinta':'Quinta-feira','Sexta':'Sexta-feira','Sabado':'Sabado','Domingo':'Domingo'
+};
+
+const el = id => document.getElementById(id);
+
+// Mobile menu
+el('menuToggle').addEventListener('click', () => {
+    el('navLinks').classList.toggle('open');
+});
+
+function populateNeighborhoods() {
+    const select = el('neighborhoodFilter');
+    // Remove old options (keep the first "Bairro" option)
+    while (select.options.length > 1) select.remove(1);
+    const neighborhoods = [...new Set(embHomes.map(h => h.neighborhood))].sort();
+    neighborhoods.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n; opt.textContent = n;
+        select.appendChild(opt);
+    });
+}
+
+function renderCards() {
+    const gv = el('genderFilter').value;
+    const dv = el('dayFilter').value;
+    const nv = el('neighborhoodFilter').value;
+    let filtered = embHomes;
+    if (gv !== 'all') filtered = filtered.filter(h => h.gender === gv);
+    if (dv !== 'all') filtered = filtered.filter(h => h.dayOfWeek === dv);
+    if (nv !== 'all') filtered = filtered.filter(h => h.neighborhood === nv);
+
+    el('resultsCount').innerHTML = `<strong>${filtered.length}</strong> EMB Home${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}`;
+
+    const grid = el('cardsGrid');
+    const empty = el('emptyState');
+
+    if (filtered.length === 0) {
+        grid.style.display = 'none';
+        empty.classList.add('visible');
+    } else {
+        empty.classList.remove('visible');
+        grid.style.display = 'grid';
+    }
+
+    grid.innerHTML = '';
+    filtered.forEach((home, i) => {
+        const coText = home.coLeaderName ? `Co-lideres: ${home.coLeaderName}` : '';
+        const locationText = home.fullAddress ? `${home.neighborhood} — ${home.fullAddress}` : home.neighborhood;
+        const genderClass = home.gender.toLowerCase();
+        const initial = home.title.replace('EMB Home ', '').charAt(0);
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.animationDelay = `${i * 0.06}s`;
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="leader-photo">${home.leaderPhoto ? `<img src="${home.leaderPhoto}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : initial}</div>
+                <div class="card-header-text">
+                    <div class="group-title">${home.title}</div>
+                    <div class="leader-names">${home.leaderName}</div>
+                    ${coText ? `<div class="co-leaders">${coText}</div>` : ''}
+                </div>
+            </div>
+            <div class="card-info">
+                <div class="info-row">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    ${dayLabels[home.dayOfWeek] || home.dayOfWeek} — ${home.time}
+                </div>
+                <div class="info-row">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    ${locationText}
+                </div>
+            </div>
+            <span class="gender-badge ${genderClass}">${home.gender}</span>
+            <p class="card-description">${home.description}</p>
+            <button class="card-btn" data-id="${home._id}">Saiba Mais</button>
+        `;
+        grid.appendChild(card);
+    });
+
+    document.querySelectorAll('.card-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const home = embHomes.find(h => h._id === btn.dataset.id);
+            if (home) openModal(home);
+        });
+    });
+}
+
+// Modal
+let currentHome = null;
+
+function openModal(home) {
+    currentHome = home;
+    el('modalGroupTitle').textContent = home.title;
+    el('modalSubtitle').textContent = `${dayLabels[home.dayOfWeek]} — ${home.time}  |  ${home.neighborhood}`;
+    el('formGroupName').value = home.title;
+    el('modalForm').style.display = 'flex';
+    el('successMessage').classList.remove('visible');
+    el('inputName').value = ''; el('inputEmail').value = ''; el('inputPhone').value = '';
+    el('modalOverlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    el('modalOverlay').classList.remove('visible');
+    document.body.style.overflow = '';
+    currentHome = null;
+}
+
+el('modalClose').addEventListener('click', closeModal);
+el('modalOverlay').addEventListener('click', e => { if (e.target === el('modalOverlay')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Netlify form submission via AJAX
+el('modalForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = el('inputName').value.trim();
+    const email = el('inputEmail').value.trim();
+    if (!name || !email) return;
+
+    const formData = new FormData(el('modalForm'));
+
+    try {
+        await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        });
+
+        el('modalForm').style.display = 'none';
+        el('successText').textContent = `Obrigado, ${name}! Voce se inscreveu no ${currentHome.title}. Em breve um lider entrara em contato.`;
+        el('successMessage').classList.add('visible');
+        setTimeout(closeModal, 3000);
+    } catch (err) {
+        console.error('Form error:', err);
+        alert('Erro ao enviar. Tente novamente.');
+    }
+});
+
+// Filters
+el('genderFilter').addEventListener('change', renderCards);
+el('dayFilter').addEventListener('change', renderCards);
+el('neighborhoodFilter').addEventListener('change', renderCards);
+
+function clearFilters() {
+    el('genderFilter').value = 'all';
+    el('dayFilter').value = 'all';
+    el('neighborhoodFilter').value = 'all';
+    renderCards();
+}
+
+el('clearFiltersBtn').addEventListener('click', clearFilters);
+el('emptyStateClearBtn').addEventListener('click', clearFilters);
+
+// Fetch data from JSON and initialize
+fetch('data/homes.json')
+    .then(res => res.json())
+    .then(data => {
+        embHomes = data.homes || data;
+        populateNeighborhoods();
+        renderCards();
+    })
+    .catch(err => {
+        console.error('Error loading EMB Homes data:', err);
+        el('resultsCount').innerHTML = '<strong>Erro</strong> ao carregar dados.';
+    });
+
+// Netlify Identity redirect after login
+if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+        if (!user) {
+            window.netlifyIdentity.on('login', () => {
+                document.location.href = '/admin/';
+            });
+        }
+    });
+}
+</script>
+
+</body>
+</html>

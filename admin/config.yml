@@ -1,0 +1,47 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "data"
+    label: "EMB Homes Data"
+    files:
+      - name: "homes"
+        label: "EMB Homes"
+        file: "data/homes.json"
+        format: "json"
+        fields:
+          - name: "homes"
+            label: "EMB Homes"
+            widget: "list"
+            fields:
+              - { name: "_id", label: "ID", widget: "string", hint: "Identificador unico (ex: 1, 2, 3...)" }
+              - { name: "title", label: "Titulo do Grupo", widget: "string", hint: "Ex: EMB Home Boca Raton" }
+              - { name: "leaderName", label: "Lider(es)", widget: "string", hint: "Ex: Pr Mateus Passinato & Pra Amanda Passinato" }
+              - { name: "coLeaderName", label: "Co-Lider(es)", widget: "string", required: false, hint: "Deixe vazio se nao houver co-lider" }
+              - { name: "leaderPhoto", label: "Foto do Lider", widget: "image", required: false, hint: "Upload da foto do lider" }
+              - { name: "description", label: "Descricao", widget: "text", hint: "Breve descricao do grupo" }
+              - name: "dayOfWeek"
+                label: "Dia da Semana"
+                widget: "select"
+                options:
+                  - { label: "Segunda-feira", value: "Segunda" }
+                  - { label: "Terca-feira", value: "Terca" }
+                  - { label: "Quarta-feira", value: "Quarta" }
+                  - { label: "Quinta-feira", value: "Quinta" }
+                  - { label: "Sexta-feira", value: "Sexta" }
+                  - { label: "Sabado", value: "Sabado" }
+                  - { label: "Domingo", value: "Domingo" }
+              - { name: "time", label: "Horario", widget: "string", default: "19:30", hint: "Ex: 19:30" }
+              - name: "gender"
+                label: "Genero"
+                widget: "select"
+                options:
+                  - { label: "Misto", value: "Misto" }
+                  - { label: "Homens", value: "Homens" }
+                  - { label: "Mulheres", value: "Mulheres" }
+              - { name: "neighborhood", label: "Bairro", widget: "string", hint: "Ex: Boca Raton, Deerfield Beach" }
+              - { name: "fullAddress", label: "Endereco Completo", widget: "string", hint: "Ex: 4753 SW 14th Pl, Deerfield Beach 33441" }
