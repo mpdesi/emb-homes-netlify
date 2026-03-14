@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMB Homes — Embaixada Church</title>
-    <meta name="description" content="Encontre um EMB Home perto de voce. Pequenos grupos da Embaixada Church no Sul da Florida.">
+    <meta name="description" content="Encontre um EMB Home perto de você. Pequenos grupos da Embaixada Church no Sul da Flórida.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -539,7 +539,7 @@
         </button>
         <ul class="navbar-links" id="navLinks">
             <li><a href="https://www.embaixadachurch.org/">Home</a></li>
-            <li><a href="https://www.embaixadachurch.org/" >Sobre Nos</a></li>
+            <li><a href="https://www.embaixadachurch.org/" >Sobre Nós</a></li>
             <li><a href="https://www.embaixadachurch.org/">Visite</a></li>
             <li><a href="#" class="active">EMB Homes</a></li>
             <li><a href="https://www.embaixadachurch.org/">Oferte</a></li>
@@ -558,7 +558,7 @@
         <div class="hero-content">
             <img src="images/emb-home-logo.png" alt="EMB Home Logo" class="hero-logo">
             <div class="hero-tagline">Pequenos Grupos</div>
-            <p class="hero-subtitle">Encontre uma comunidade perto de voce. Vida real, conexao real.</p>
+            <p class="hero-subtitle">Encontre uma comunidade perto de você. Vida real, conexão real.</p>
         </div>
     </section>
 
@@ -567,7 +567,7 @@
         <div class="filter-bar">
             <span class="filter-label">Filtrar:</span>
             <select id="genderFilter">
-                <option value="all">Genero</option>
+                <option value="all">Gênero</option>
                 <option value="Homens">Homens</option>
                 <option value="Mulheres">Mulheres</option>
                 <option value="Misto">Misto</option>
@@ -575,11 +575,11 @@
             <select id="dayFilter">
                 <option value="all">Dia da Semana</option>
                 <option value="Segunda">Segunda-feira</option>
-                <option value="Terca">Terca-feira</option>
+                <option value="Terca">Terça-feira</option>
                 <option value="Quarta">Quarta-feira</option>
                 <option value="Quinta">Quinta-feira</option>
                 <option value="Sexta">Sexta-feira</option>
-                <option value="Sabado">Sabado</option>
+                <option value="Sabado">Sábado</option>
                 <option value="Domingo">Domingo</option>
             </select>
             <select id="neighborhoodFilter">
@@ -618,7 +618,7 @@
     <!-- BOTTOM CTA + BACK TO HOME -->
     <section class="bottom-cta">
         <h2>Queremos Te<br>Conhecer</h2>
-        <p>Junte-se a um EMB Home e faca parte de uma familia que caminha junto com voce.</p>
+        <p>Junte-se a um EMB Home e faça parte de uma família que caminha junto com você.</p>
         <a href="https://www.embaixadachurch.org/" class="bottom-cta-home">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Voltar ao Site Principal
@@ -676,8 +676,8 @@
 let embHomes = [];
 
 const dayLabels = {
-    'Segunda':'Segunda-feira','Terca':'Terca-feira','Quarta':'Quarta-feira',
-    'Quinta':'Quinta-feira','Sexta':'Sexta-feira','Sabado':'Sabado','Domingo':'Domingo'
+    'Segunda':'Segunda-feira','Terca':'Terça-feira','Quarta':'Quarta-feira',
+    'Quinta':'Quinta-feira','Sexta':'Sexta-feira','Sabado':'Sábado','Domingo':'Domingo'
 };
 
 const el = id => document.getElementById(id);
@@ -723,7 +723,7 @@ function renderCards() {
 
     grid.innerHTML = '';
     filtered.forEach((home, i) => {
-        const coText = home.coLeaderName ? `Co-lideres: ${home.coLeaderName}` : '';
+        const coText = home.coLeaderName ? `Co-líderes: ${home.coLeaderName}` : '';
         const locationText = home.fullAddress ? `${home.neighborhood} — ${home.fullAddress}` : home.neighborhood;
         const genderClass = home.gender.toLowerCase();
         const initial = home.title.replace('EMB Home ', '').charAt(0);
@@ -811,7 +811,7 @@ el('modalForm').addEventListener('submit', async (e) => {
         });
 
         el('modalForm').style.display = 'none';
-        el('successText').textContent = `Obrigado, ${name}! Voce se inscreveu no ${currentHome.title}. Em breve um lider entrara em contato.`;
+        el('successText').textContent = `Obrigado, ${name}! Você se inscreveu no ${currentHome.title}. Em breve um líder entrará em contato.`;
         el('successMessage').classList.add('visible');
         setTimeout(closeModal, 3000);
     } catch (err) {
@@ -857,39 +857,22 @@ const orangeIcon = L.divIcon({
     popupAnchor: [0, -36]
 });
 
-function getGeoCache() {
-    try { return JSON.parse(localStorage.getItem('embHomesGeoCache') || '{}'); }
-    catch { return {}; }
-}
+// Hardcoded coordinates for all EMB Home addresses
+const addressCoords = {
+    '4753 SW 14th Pl, Deerfield Beach 33441': { lat: 26.3005, lng: -80.1190 },
+    '8171 Thames Blvd Unit B, Boca Raton 33433': { lat: 26.3685, lng: -80.1590 },
+    '9500 NW 49th Ct, Coral Springs 33076': { lat: 26.3060, lng: -80.2490 },
+    '405 NW 44th Ter Apt 102, Deerfield Beach 33442': { lat: 26.3180, lng: -80.1310 },
+    '4951 W Sample Road Apt 308, Coconut Creek 33073': { lat: 26.2770, lng: -80.1650 },
+    '3617 Wash Road Apt C, Lake Worth': { lat: 26.5930, lng: -80.0730 },
+    '5755 Orchard Way, West Palm Beach 33417': { lat: 26.6830, lng: -80.1120 },
+    '22521 SW 66th Ave Apt 312, Boca Raton': { lat: 26.3250, lng: -80.2090 },
+    '10824 La Salinas Cir, Boca Raton 33428': { lat: 26.3400, lng: -80.2300 },
+    '9044 NW 39th St, Coral Springs 33065': { lat: 26.2710, lng: -80.2530 },
+    '21682 Abington Ct, Boca Raton 33428': { lat: 26.3450, lng: -80.2350 }
+};
 
-function setGeoCache(cache) {
-    try { localStorage.setItem('embHomesGeoCache', JSON.stringify(cache)); }
-    catch {}
-}
-
-async function geocodeAddress(address) {
-    const cache = getGeoCache();
-    if (cache[address]) return cache[address];
-
-    try {
-        const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', FL, USA')}&limit=1`,
-            { headers: { 'Accept': 'application/json' } }
-        );
-        const data = await res.json();
-        if (data && data.length > 0) {
-            const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-            cache[address] = coords;
-            setGeoCache(cache);
-            return coords;
-        }
-    } catch (err) {
-        console.warn('Geocode error for:', address, err);
-    }
-    return null;
-}
-
-async function updateMapMarkers(filteredHomes) {
+function updateMapMarkers(filteredHomes) {
     if (!map) return;
 
     markers.forEach(m => map.removeLayer(m));
@@ -897,18 +880,13 @@ async function updateMapMarkers(filteredHomes) {
 
     const bounds = [];
 
-    for (let i = 0; i < filteredHomes.length; i++) {
-        const home = filteredHomes[i];
-        if (!home.fullAddress) continue;
+    filteredHomes.forEach(home => {
+        if (!home.fullAddress) return;
 
-        const coords = await geocodeAddress(home.fullAddress);
-        if (!coords) continue;
+        const coords = addressCoords[home.fullAddress];
+        if (!coords) return;
 
-        // Small random offset to prevent exact overlaps at same address
-        const lat = coords.lat + (Math.random() - 0.5) * 0.001;
-        const lng = coords.lng + (Math.random() - 0.5) * 0.001;
-
-        const marker = L.marker([lat, lng], { icon: orangeIcon }).addTo(map);
+        const marker = L.marker([coords.lat, coords.lng], { icon: orangeIcon }).addTo(map);
         marker.bindPopup(`
             <div class="map-popup">
                 <div class="popup-title">${home.title}</div>
@@ -920,13 +898,8 @@ async function updateMapMarkers(filteredHomes) {
             </div>
         `);
         markers.push(marker);
-        bounds.push([lat, lng]);
-
-        // Rate-limit Nominatim requests (1 per second)
-        if (!getGeoCache()[home.fullAddress] && i < filteredHomes.length - 1) {
-            await new Promise(r => setTimeout(r, 1100));
-        }
-    }
+        bounds.push([coords.lat, coords.lng]);
+    });
 
     if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
