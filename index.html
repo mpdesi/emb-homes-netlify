@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         :root {
@@ -116,26 +118,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-eyebrow {
-            font-size: 14px; font-weight: 500; letter-spacing: 6px;
-            text-transform: uppercase; color: var(--white); margin-bottom: 16px;
-            animation: fadeUp 0.8s var(--ease) 0.1s both;
+
+        .hero-logo {
+            max-width: clamp(280px, 40vw, 500px);
+            height: auto;
+            animation: fadeUp 0.8s var(--ease) 0.15s both;
         }
 
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(72px, 14vw, 140px);
-            font-weight: 400; line-height: 0.9; color: var(--white);
-            text-transform: uppercase; letter-spacing: 4px;
-        }
-
-        .hero h1 .dot { color: var(--orange); }
-
-        .hero-highlight {
+        .hero-tagline {
             display: inline-block; background: var(--orange); color: var(--black);
             font-family: var(--font-display); font-size: clamp(16px, 2vw, 22px);
             letter-spacing: 6px; text-transform: uppercase;
-            padding: 6px 32px; margin-top: 8px;
+            padding: 6px 32px; margin-top: 16px;
             animation: fadeUp 0.8s var(--ease) 0.2s both;
         }
 
@@ -303,6 +297,59 @@
         .card-btn:hover {
             background: var(--orange-hover); transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255,140,0,0.3);
+        }
+
+        /* ============================================
+           MAP SECTION
+           ============================================ */
+        .map-section {
+            max-width: 1200px; margin: 0 auto; padding: 0 40px 60px;
+        }
+
+        .map-header {
+            display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 24px;
+        }
+
+        .map-title {
+            font-family: var(--font-display); font-size: 48px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--black);
+        }
+
+        .map-title::after {
+            content: ''; display: block; width: 100%; height: 8px;
+            background: var(--orange); margin-top: -4px;
+        }
+
+        .map-container {
+            width: 100%; height: 450px;
+            border: 2px solid var(--black);
+            position: relative;
+        }
+
+        #homesMap { width: 100%; height: 100%; }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 0 !important;
+            border: 2px solid var(--orange) !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+        }
+
+        .leaflet-popup-tip { border-top-color: var(--orange) !important; }
+
+        .map-popup { font-family: var(--font-body); }
+        .map-popup .popup-title {
+            font-weight: 800; font-size: 14px; text-transform: uppercase;
+            margin-bottom: 4px; color: var(--black);
+        }
+        .map-popup .popup-info {
+            font-size: 12px; color: var(--gray-dark); line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .map-section { padding: 0 20px 40px; }
+            .map-title { font-size: 32px; }
+            .map-container { height: 350px; }
         }
 
         /* ============================================
@@ -509,9 +556,8 @@
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <div class="hero-eyebrow">W E L C O M E &nbsp; T O</div>
-            <h1>Emb<span class="dot">.</span></h1>
-            <div class="hero-highlight">Homes &mdash; Pequenos Grupos</div>
+            <img src="images/emb-home-logo.png" alt="EMB Home Logo" class="hero-logo">
+            <div class="hero-tagline">Pequenos Grupos</div>
             <p class="hero-subtitle">Encontre uma comunidade perto de voce. Vida real, conexao real.</p>
         </div>
     </section>
@@ -556,6 +602,16 @@
             </div>
             <p>Nenhum EMB Home encontrado com esses filtros.</p>
             <button id="emptyStateClearBtn">Limpar Filtros</button>
+        </div>
+    </section>
+
+    <!-- MAP -->
+    <section class="map-section">
+        <div class="map-header">
+            <div class="map-title">Mapa dos Grupos</div>
+        </div>
+        <div class="map-container">
+            <div id="homesMap"></div>
         </div>
     </section>
 
@@ -707,6 +763,9 @@ function renderCards() {
             if (home) openModal(home);
         });
     });
+
+    // Update map markers with filtered results
+    updateMapMarkers(filtered);
 }
 
 // Modal
@@ -776,12 +835,111 @@ function clearFilters() {
 el('clearFiltersBtn').addEventListener('click', clearFilters);
 el('emptyStateClearBtn').addEventListener('click', clearFilters);
 
+// ============================================
+// MAP (Leaflet + OpenStreetMap)
+// ============================================
+let map = null;
+let markers = [];
+
+function initMap() {
+    map = L.map('homesMap', { scrollWheelZoom: false }).setView([26.40, -80.15], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 18
+    }).addTo(map);
+}
+
+const orangeIcon = L.divIcon({
+    className: 'custom-marker',
+    html: '<svg width="28" height="40" viewBox="0 0 28 40" xmlns="http://www.w3.org/2000/svg"><path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.27 21.73 0 14 0z" fill="#FF8C00"/><circle cx="14" cy="14" r="6" fill="#fff"/></svg>',
+    iconSize: [28, 40],
+    iconAnchor: [14, 40],
+    popupAnchor: [0, -36]
+});
+
+function getGeoCache() {
+    try { return JSON.parse(localStorage.getItem('embHomesGeoCache') || '{}'); }
+    catch { return {}; }
+}
+
+function setGeoCache(cache) {
+    try { localStorage.setItem('embHomesGeoCache', JSON.stringify(cache)); }
+    catch {}
+}
+
+async function geocodeAddress(address) {
+    const cache = getGeoCache();
+    if (cache[address]) return cache[address];
+
+    try {
+        const res = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', FL, USA')}&limit=1`,
+            { headers: { 'Accept': 'application/json' } }
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+            const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+            cache[address] = coords;
+            setGeoCache(cache);
+            return coords;
+        }
+    } catch (err) {
+        console.warn('Geocode error for:', address, err);
+    }
+    return null;
+}
+
+async function updateMapMarkers(filteredHomes) {
+    if (!map) return;
+
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    const bounds = [];
+
+    for (let i = 0; i < filteredHomes.length; i++) {
+        const home = filteredHomes[i];
+        if (!home.fullAddress) continue;
+
+        const coords = await geocodeAddress(home.fullAddress);
+        if (!coords) continue;
+
+        // Small random offset to prevent exact overlaps at same address
+        const lat = coords.lat + (Math.random() - 0.5) * 0.001;
+        const lng = coords.lng + (Math.random() - 0.5) * 0.001;
+
+        const marker = L.marker([lat, lng], { icon: orangeIcon }).addTo(map);
+        marker.bindPopup(`
+            <div class="map-popup">
+                <div class="popup-title">${home.title}</div>
+                <div class="popup-info">
+                    ${home.leaderName}<br>
+                    ${dayLabels[home.dayOfWeek] || home.dayOfWeek} — ${home.time}<br>
+                    ${home.neighborhood}
+                </div>
+            </div>
+        `);
+        markers.push(marker);
+        bounds.push([lat, lng]);
+
+        // Rate-limit Nominatim requests (1 per second)
+        if (!getGeoCache()[home.fullAddress] && i < filteredHomes.length - 1) {
+            await new Promise(r => setTimeout(r, 1100));
+        }
+    }
+
+    if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+    }
+}
+
 // Fetch data from JSON and initialize
 fetch('data/homes.json')
     .then(res => res.json())
     .then(data => {
         embHomes = data.homes || data;
         populateNeighborhoods();
+        initMap();
         renderCards();
     })
     .catch(err => {
