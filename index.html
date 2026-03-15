@@ -8,9 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         :root {
             --orange: #FF8C00;
@@ -299,60 +297,7 @@
             box-shadow: 0 6px 20px rgba(255,140,0,0.3);
         }
 
-        /* ============================================
-           MAP SECTION
-           ============================================ */
-        .map-section {
-            max-width: 1200px; margin: 0 auto; padding: 0 40px 60px;
-        }
-
-        .map-header {
-            display: flex; align-items: center;
-            justify-content: space-between; margin-bottom: 24px;
-        }
-
-        .map-title {
-            font-family: var(--font-display); font-size: 48px; letter-spacing: 2px;
-            text-transform: uppercase; color: var(--black);
-        }
-
-        .map-title::after {
-            content: ''; display: block; width: 100%; height: 8px;
-            background: var(--orange); margin-top: -4px;
-        }
-
-        .map-container {
-            width: 100%; height: 450px;
-            border: 2px solid var(--black);
-            position: relative;
-        }
-
-        #homesMap { width: 100%; height: 100%; }
-
-        .leaflet-popup-content-wrapper {
-            border-radius: 0 !important;
-            border: 2px solid var(--orange) !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
-        }
-
-        .leaflet-popup-tip { border-top-color: var(--orange) !important; }
-
-        .map-popup { font-family: var(--font-body); }
-        .map-popup .popup-title {
-            font-weight: 800; font-size: 14px; text-transform: uppercase;
-            margin-bottom: 4px; color: var(--black);
-        }
-        .map-popup .popup-info {
-            font-size: 12px; color: var(--gray-dark); line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .map-section { padding: 0 20px 40px; }
-            .map-title { font-size: 32px; }
-            .map-container { height: 350px; }
-        }
-
-        /* ============================================
+/* ============================================
            EMPTY STATE
            ============================================ */
         .empty-state { display: none; text-align: center; padding: 80px 20px; }
@@ -593,17 +538,7 @@
         </div>
     </section>
 
-    <!-- MAP -->
-    <section class="map-section">
-        <div class="map-header">
-            <div class="map-title">Mapa dos Grupos</div>
-        </div>
-        <div class="map-container">
-            <div id="homesMap"></div>
-        </div>
-    </section>
-
-    <!-- BOTTOM CTA + BACK TO HOME -->
+<!-- BOTTOM CTA + BACK TO HOME -->
     <section class="bottom-cta">
         <h2>Queremos Te<br>Conhecer</h2>
         <p>Junte-se a um EMB Home e faça parte de uma família que caminha junto com você.</p>
@@ -748,8 +683,7 @@ function renderCards() {
         });
     });
 
-    // Update map markers with filtered results
-    updateMapMarkers(filtered);
+
 }
 
 // Modal
@@ -819,76 +753,6 @@ function clearFilters() {
 el('clearFiltersBtn').addEventListener('click', clearFilters);
 el('emptyStateClearBtn').addEventListener('click', clearFilters);
 
-// ============================================
-// MAP (Leaflet + OpenStreetMap)
-// ============================================
-let map = null;
-let markers = [];
-
-function initMap() {
-    map = L.map('homesMap', { scrollWheelZoom: false }).setView([26.40, -80.15], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 18
-    }).addTo(map);
-}
-
-const orangeIcon = L.divIcon({
-    className: 'custom-marker',
-    html: '<svg width="28" height="40" viewBox="0 0 28 40" xmlns="http://www.w3.org/2000/svg"><path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.27 21.73 0 14 0z" fill="#FF8C00"/><circle cx="14" cy="14" r="6" fill="#fff"/></svg>',
-    iconSize: [28, 40],
-    iconAnchor: [14, 40],
-    popupAnchor: [0, -36]
-});
-
-// Hardcoded coordinates for all EMB Home addresses
-const addressCoords = {
-    '4753 SW 14th Pl, Deerfield Beach 33441': { lat: 26.3005, lng: -80.1190 },
-    '8171 Thames Blvd Unit B, Boca Raton 33433': { lat: 26.3685, lng: -80.1590 },
-    '9500 NW 49th Ct, Coral Springs 33076': { lat: 26.3060, lng: -80.2490 },
-    '405 NW 44th Ter Apt 102, Deerfield Beach 33442': { lat: 26.3180, lng: -80.1310 },
-    '4951 W Sample Road Apt 308, Coconut Creek 33073': { lat: 26.2770, lng: -80.1650 },
-    '3617 Wash Road Apt C, Lake Worth': { lat: 26.5930, lng: -80.0730 },
-    '5755 Orchard Way, West Palm Beach 33417': { lat: 26.6830, lng: -80.1120 },
-    '22521 SW 66th Ave Apt 312, Boca Raton': { lat: 26.3250, lng: -80.2090 },
-    '10824 La Salinas Cir, Boca Raton 33428': { lat: 26.3400, lng: -80.2300 },
-    '9044 NW 39th St, Coral Springs 33065': { lat: 26.2710, lng: -80.2530 },
-    '21682 Abington Ct, Boca Raton 33428': { lat: 26.3450, lng: -80.2350 }
-};
-
-function updateMapMarkers(filteredHomes) {
-    if (!map) return;
-
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
-
-    const bounds = [];
-
-    filteredHomes.forEach(home => {
-        if (!home.fullAddress) return;
-
-        const coords = addressCoords[home.fullAddress];
-        if (!coords) return;
-
-        const marker = L.marker([coords.lat, coords.lng], { icon: orangeIcon }).addTo(map);
-        marker.bindPopup(`
-            <div class="map-popup">
-                <div class="popup-title">${home.title}</div>
-                <div class="popup-info">
-                    ${home.leaderName}<br>
-                    ${dayLabels[home.dayOfWeek] || home.dayOfWeek} — ${home.time}<br>
-                    ${home.neighborhood}
-                </div>
-            </div>
-        `);
-        markers.push(marker);
-        bounds.push([coords.lat, coords.lng]);
-    });
-
-    if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
-    }
-}
 
 // Fetch data from JSON and initialize
 fetch('data/homes.json')
@@ -896,7 +760,6 @@ fetch('data/homes.json')
     .then(data => {
         embHomes = data.homes || data;
         populateNeighborhoods();
-        initMap();
         renderCards();
     })
     .catch(err => {
