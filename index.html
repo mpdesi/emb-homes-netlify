@@ -534,22 +534,10 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <a href="https://www.embaixadachurch.org/" class="welcome-home">Welcome Home</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <ul class="navbar-links" id="navLinks">
-            <li><a href="https://www.embaixadachurch.org/">Home</a></li>
-            <li><a href="https://www.embaixadachurch.org/pages/novo-aqui">Sobre Nós</a></li>
-            <li><a href="https://www.embaixadachurch.org/events">Visite</a></li>
-            <li><a href="#" class="active">EMB Homes</a></li>
-            <li><a href="https://www.embaixadachurch.org/pages/giving">Oferte</a></li>
-            <li>
-                <a href="https://www.embaixadachurch.org/" class="back-home-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-                    Voltar ao Site
-                </a>
-            </li>
-        </ul>
+        <a href="https://www.embaixadachurch.org/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Voltar ao Site
+        </a>
     </nav>
 
     <!-- HERO -->
@@ -682,10 +670,6 @@ const dayLabels = {
 
 const el = id => document.getElementById(id);
 
-// Mobile menu
-el('menuToggle').addEventListener('click', () => {
-    el('navLinks').classList.toggle('open');
-});
 
 function populateNeighborhoods() {
     const select = el('neighborhoodFilter');
